@@ -56,7 +56,9 @@ class Connection(AdomdConnection):
             connection_string += f";EffectiveUserName={effective_user}"
         self.ConnectionString = connection_string
 
-    def query(self, query_str: str) -> Union[pd.DataFrame, str, int]:
+    def query(
+        self, query_str: str, timeout: int = 600
+    ) -> Union[pd.DataFrame, str, int]:
         """Executes query on Model and returns results in Pandas DataFrame.
 
         Iterates through results of `AdomdCommmand().ExecuteReader()`
@@ -97,7 +99,9 @@ class Connection(AdomdConnection):
 
         logger.debug("Querying Model...")
         logger.debug(query_str)
-        query = AdomdCommand(query_str, self).ExecuteReader()
+        command = AdomdCommand(query_str, self)
+        command.CommandTimeout = timeout
+        query = command.ExecuteReader()
         column_headers = [
             (index, query.GetName(index)) for index in range(0, query.FieldCount)
         ]
