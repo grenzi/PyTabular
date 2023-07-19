@@ -10,7 +10,7 @@ import os
 import platform
 import sys
 
-# from rich import pretty
+from rich import pretty
 # from rich.console import Console
 # from rich.logging import RichHandler
 # from rich.theme import Theme
